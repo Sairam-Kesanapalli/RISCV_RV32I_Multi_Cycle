@@ -211,7 +211,7 @@ module rv32i_single_cycle #(
         .MemRead(MemRead),
         .MemWrite(MemWrite),
         .write_data(read_data2),
-        .addr(alu_result),
+        .addr(ALUOut),
         .read_data(mem_data)
     );
 
