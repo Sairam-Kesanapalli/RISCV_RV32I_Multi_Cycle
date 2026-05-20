@@ -50,6 +50,20 @@ module instruction_memory #(
         instr_memory[34]  = 32'h000d8e67;
         instr_memory[35]  = 32'h07b00e93;
         instr_memory[36]  = 32'h04d00e93;
+
+        // ---- Regression Framework Overlay ----
+        // If +TEST_DIR is provided, overwrite the hardcoded instructions above
+        // with the specific regression test's program.hex
+        begin : load_test
+            reg [8191:0] test_dir; // 1024 bytes string
+            integer i;
+            if ($value$plusargs("TEST_DIR=%s", test_dir)) begin
+                for (i = 0; i < DEPTH; i = i + 1) begin
+                    instr_memory[i] = 32'hx;
+                end
+                $readmemh({test_dir, "/program.hex"}, instr_memory);
+            end
+        end
     end
 
     assign instr = instr_memory[addr[ADDR_WIDTH+1:2]];
